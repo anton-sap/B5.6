@@ -11,6 +11,11 @@ provider "yandex" {
   zone = "ru-central1-a"
 }
 
+resource "yandex_compute_image" "debian11" {
+  name       = "my-debian11-image"
+  source_image = "fd8tq7bdl10k819vprud"
+}
+
 resource "yandex_compute_instance" "lemp-node-01" {
   name = "lemp-node-01"
   hostname = "lemp-node-01"
@@ -23,7 +28,7 @@ resource "yandex_compute_instance" "lemp-node-01" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd8it9bbj7qma34iaqgc"
+      image_id = "{yandex_compute_image.debian11.id}"
       size = 15
     }
   }
