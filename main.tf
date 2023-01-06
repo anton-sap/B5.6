@@ -8,28 +8,31 @@ terraform {
 }
 
 provider "yandex" {
-  zone = "ru-central1-a"
+  service_account_key_file = "./key.json"
+  zone                     = "ru-central1-a"
+  folder_id                = "b1ghmnbhv26t427tkagk"
 }
 
-resource "yandex_compute_image" "debian11" {
-  name       = "my-debian11-image"
-  source_image = "fd8tq7bdl10k819vprud"
+resource "yandex_compute_image" "lemp" {
+  name         = "my-lemp-image"
+  family       = "lemp"
+  source_image = "fd8c9koat6nv4qacg49b"
 }
 
 resource "yandex_compute_instance" "lemp-node-01" {
-  name = "lemp-node-01"
+  name     = "lemp-node-01"
   hostname = "lemp-node-01"
 
   resources {
-    cores  = 2
-    memory = 2
-    core_fraction = 50
+    cores         = 2
+    memory        = 2
+    core_fraction = 20
   }
 
   boot_disk {
     initialize_params {
-      image_id = "{yandex_compute_image.debian11.id}"
-      size = 15
+      image_id = "${yandex_compute_image.lemp.id}"
+      size     = 15
     }
   }
 
