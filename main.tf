@@ -34,7 +34,7 @@ resource "yandex_compute_instance" "lemp-node-01" {
   }
 
   metadata = {
-    ssh-keys = "ubuntu:${file("~/.ssh/id_ed25519.pub")}"
+    user-data = "${file("./metadata.yaml")}"
   }
 }
 
@@ -51,18 +51,11 @@ resource "yandex_vpc_subnet" "subnet-1" {
 }
 
 output "internal_ip_address_vm_1" {
-  value = yandex_compute_instance.vm-1.network_interface.0.ip_address
-}
-
-output "internal_ip_address_vm_2" {
-  value = yandex_compute_instance.vm-2.network_interface.0.ip_address
+  value = yandex_compute_instance.lemp-node-01.network_interface.0.ip_address
 }
 
 
 output "external_ip_address_vm_1" {
-  value = yandex_compute_instance.vm-1.network_interface.0.nat_ip_address
+  value = yandex_compute_instance.lemp-node-01.network_interface.0.nat_ip_address
 }
 
-output "external_ip_address_vm_2" {
-  value = yandex_compute_instance.vm-2.network_interface.0.nat_ip_address
-}
