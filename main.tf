@@ -5,6 +5,19 @@ terraform {
     }
   }
   required_version = ">= 0.13"
+  
+  backend "s3" {
+    endpoint   = "storage.yandexcloud.net"
+    bucket     = "tf-sf-anton"
+    region     = "ru-central1"
+    key        = "tf_remote.tfstate"
+    access_key = "YCAJEs-TeN6Nzvg0uGVSGNVOi"
+    secret_key = "YCOdlE1eRmV_e5BTFgFcygEauMiMNBqHC8c4HkD5"
+
+    skip_region_validation      = true
+    skip_credentials_validation = true
+  }
+
 }
 
 provider "yandex" {
