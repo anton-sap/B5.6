@@ -2,10 +2,11 @@ terraform {
   required_providers {
     yandex = {
       source = "yandex-cloud/yandex"
+      version = "0.84.0"
     }
   }
   required_version = ">= 0.13"
-  
+
   backend "s3" {
     endpoint   = "storage.yandexcloud.net"
     bucket     = "tf-sf-anton"
@@ -22,43 +23,9 @@ terraform {
 
 provider "yandex" {
   service_account_key_file = "./key.json"
-  zone                     = "ru-central1-a"
+  //zone                     = "ru-central1-a"
   folder_id                = "b1ghmnbhv26t427tkagk"
 }
-
-resource "yandex_compute_image" "lemp" {
-  name         = "my-lemp-image"
-  family       = "lemp"
-  source_image = "fd8c9koat6nv4qacg49b"
-}
-
-resource "yandex_compute_instance" "lemp-node-01" {
-  name     = "lemp-node-01"
-  hostname = "lemp-node-01"
-
-  resources {
-    cores         = 2
-    memory        = 2
-    core_fraction = 20
-  }
-
-  boot_disk {
-    initialize_params {
-      image_id = "${yandex_compute_image.lemp.id}"
-      size     = 15
-    }
-  }
-
-  network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = true
-  }
-
-  metadata = {
-    user-data = "${file("./metadata.yaml")}"
-  }
-}
-
 
 resource "yandex_vpc_network" "network-1" {
   name = "network1"
@@ -71,11 +38,39 @@ resource "yandex_vpc_subnet" "subnet-1" {
   v4_cidr_blocks = ["192.168.10.0/24"]
 }
 
-output "internal_ip_address_vm_1" {
-  value = yandex_compute_instance.lemp-node-01.network_interface.0.ip_address
+resource "yandex_vpc_subnet" "subnet-2" {
+  name           = "subnet2"
+  zone           = "ru-central1-b"
+  network_id     = yandex_vpc_network.network-1.id
+  v4_cidr_blocks = ["192.168.11.0/24"]
 }
 
+module "ya-vm-1"  {
+  source          = "./modules/ya-vm"
+  image_name      = "lamp"
+  image_family    = "lamp"
+  source_image_id = "fd8ce6so660hmgehordb"
+  instance_name   = "yc-in-01"
+  host_name       = "yc-in-01"
+  cpu_core        = 2
+  mem_size        = 2
+  core_fraction   = 20
+  disk_size       = 10
+  vpc_subnet_id   = yandex_vpc_subnet.subnet-1.id
+  zone_name       = "ru-central1-a"
+}
 
-output "external_ip_address_vm_1" {
-  value = yandex_compute_instance.lemp-node-01.network_interface.0.nat_ip_address
+module "ya-vm-2" {
+  source          = "./modules/ya-vm"
+  image_name      = "lemp"
+  image_family    = "lemp"
+  source_image_id = "fd8movi7o1ofl59h1uu9"
+  instance_name   = "yc-in-02"
+  host_name       = "yc-in-02"
+  cpu_core        = 2
+  mem_size        = 2
+  core_fraction   = 20
+  disk_size       = 10
+  vpc_subnet_id   = yandex_vpc_subnet.subnet-2.id
+  zone_name       = "ru-central1-b"
 }
