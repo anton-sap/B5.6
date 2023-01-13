@@ -77,3 +77,43 @@ module "ya-vm-2" {
   vpc_subnet_id   = yandex_vpc_subnet.subnet-2.id
   zone_name       = "ru-central1-b"
 }
+
+// Load Balancer configuration
+resource "yandex_lb_target_group" "web-servers" {
+  name      = "web-servers"
+  folder_id = "b1ghmnbhv26t427tkagk"
+
+  target {
+    subnet_id = "${yandex_vpc_subnet.subnet-1.id}"
+    address   = "${module.ya-vm-1.internal_ip_address_vm}"
+  }
+
+  target {
+    subnet_id = "${yandex_vpc_subnet.subnet-2.id}"
+    address   = "${module.ya-vm-2.internal_ip_address_vm}"
+  }
+}
+
+resource "yandex_lb_network_load_balancer" "web-servers" {
+  name = "web-servers"
+
+  listener {
+    name = "http-listener"
+    port = 80
+    external_address_spec {
+      ip_version = "ipv4"
+    }
+  }
+
+  attached_target_group {
+    target_group_id = "${yandex_lb_target_group.web-servers.id}"
+
+    healthcheck {
+      name = "http"
+      http_options {
+        port = 80
+        path = "/"
+      }
+    }
+  }
+}

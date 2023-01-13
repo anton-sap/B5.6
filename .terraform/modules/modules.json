@@ -1,1 +1,1 @@
-{"Modules":[{"Key":"ya-vm-2","Source":"./modules/ya-vm","Dir":"modules/ya-vm"},{"Key":"ya-vm","Source":"./modules/ya-vm","Dir":"modules/ya-vm"},{"Key":"","Source":"","Dir":"."},{"Key":"ya-vm-1","Source":"./modules/ya-vm","Dir":"modules/ya-vm"}]}
+{"Modules":[{"Key":"ya-vm","Source":"./modules/ya-vm","Dir":"modules/ya-vm"},{"Key":"","Source":"","Dir":"."},{"Key":"ya-vm-1","Source":"./modules/ya-vm","Dir":"modules/ya-vm"},{"Key":"ya-lb","Source":"./modules/ya-lb","Dir":"modules/ya-lb"},{"Key":"ya-vm-2","Source":"./modules/ya-vm","Dir":"modules/ya-vm"}]}
