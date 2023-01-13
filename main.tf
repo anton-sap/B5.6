@@ -14,7 +14,7 @@ terraform {
     region     = "ru-central1"
     key        = "tf_remote.tfstate"
     access_key = <PASTE YOUR ACCESS KEY HERE> // access_key for YC
-    secret_key = <PASTE YOUR SECRET KEY HERE> // secret_key for YA
+    secret_key = <PASTE YOUR SECRET KEY HERE> // secret_key for YC
 
 
     skip_region_validation      = true
