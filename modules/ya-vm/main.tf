@@ -10,9 +10,7 @@ terraform {
 }
 
 data "yandex_compute_image" "my-image" {
-  //name         = var.image_name
   family       = var.image_family
-  //source_image = var.source_image_id
 }
 
 resource "yandex_compute_instance" "yc-instance" {

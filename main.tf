@@ -13,6 +13,8 @@ terraform {
     bucket     = "tf-sf-anton"
     region     = "ru-central1"
     key        = "tf_remote.tfstate"
+    //access_key = <PASTE YOUR ACCESS KEY HERE>
+    //secret_key = <PASTE YOUR SECRET KEY HERE>
     access_key = "YCAJEs-TeN6Nzvg0uGVSGNVOi"
     secret_key = "YCOdlE1eRmV_e5BTFgFcygEauMiMNBqHC8c4HkD5"
 
